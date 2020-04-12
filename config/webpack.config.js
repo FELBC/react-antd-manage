@@ -373,6 +373,7 @@ module.exports = function(webpackEnv) {
                 ),
                 
                 plugins: [
+                  ["import", { "libraryName": "antd", "style": true }],
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -385,6 +386,7 @@ module.exports = function(webpackEnv) {
                     },
                   ],
                 ],
+
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
                 // directory for faster rebuilds.
