@@ -1,6 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { MailOutlined, AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { MailOutlined } from '@ant-design/icons';
 import MenuConfig from './../../config/menuConfig';
 import './index.less';
 
