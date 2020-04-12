@@ -373,6 +373,7 @@ module.exports = function(webpackEnv) {
                 ),
                 
                 plugins: [
+                  //antd 按需加载
                   ["import", { "libraryName": "antd", "style": true }],
                   [
                     require.resolve('babel-plugin-named-asset-import'),
