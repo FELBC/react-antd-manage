@@ -8,7 +8,7 @@ export default class Header extends React.Component{
 
     UNSAFE_componentWillMount(){
         this.setState({
-            userName:'蔡利斌'
+            userName:'LBC'
         });
         setInterval(() => {
             let sysTime = Util.formateDate(new Date().getTime());
