@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
+import { NavLink } from 'react-router-dom';
 import { MailOutlined } from '@ant-design/icons';
 import MenuConfig from './../../config/menuConfig';
 import './index.less';
@@ -38,7 +39,7 @@ export default class NavLeft extends React.Component{
                         </span>
                     } 
                     key={item.key}>
-                    {item.title}
+                    <NavLink to={item.key}>{item.title}</NavLink>
                 </Menu.Item>
             )
         })
