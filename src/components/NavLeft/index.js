@@ -48,7 +48,7 @@ export default class NavLeft extends React.Component{
         return(
             <div>
                 <div className="logo">
-                    <img src="/assets/logo-ant.svg" alt="" />
+                    <img src="/logo192.png" alt="" />
                     <h1>Antd Manage</h1>
                 </div>
                 <Menu theme="dark" onClick={handleClick} mode="vertical">
