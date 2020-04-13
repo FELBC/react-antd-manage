@@ -14,7 +14,7 @@ export default class Header extends React.Component{
             this.setState({
                 sysTime
             })
-        })
+        },1000)
     }
 
     render(){
