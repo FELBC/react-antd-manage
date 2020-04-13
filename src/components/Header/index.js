@@ -2,19 +2,43 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import './index.less'
 import Util from '../../utils/utils';
+import axios from '../../axios';
 
 export default class Header extends React.Component{
 
     UNSAFE_componentWillMount(){
         this.setState({
             userName:'蔡利斌'
-        })
+        });
         setInterval(() => {
             let sysTime = Util.formateDate(new Date().getTime());
             this.setState({
                 sysTime
             })
-        },1000)
+        },1000);
+        this.getWeatherAPIData();
+    }
+
+    getWeatherAPIData(){
+        let city = '德清';
+        // axios不封装jsonp直接调用存在跨域
+        // axios.get('http://api.map.baidu.com/telematics/v3/weather?location=' + encodeURIComponent(city) + '&output=json&ak=3p49MVra6urFRGOT9s8UBWr2').then((res) => {
+        //     console.log(res);
+        // });
+        axios.jsonp({
+            url:'http://api.map.baidu.com/telematics/v3/weather?location=' + encodeURIComponent(city) + '&output=json&ak=3p49MVra6urFRGOT9s8UBWr2'
+        }).then((res) => {
+            if(res.status === 'success'){
+                console.log(res);
+                let city = res.results[0].currentCity;
+                let weatherData = res.results[0].weather_data[0];
+                this.setState({
+                    city:city,
+                    dayPictureUrl:weatherData.dayPictureUrl,
+                    weather:weatherData.weather
+                });
+            }
+        });
     }
 
     render(){
@@ -32,7 +56,12 @@ export default class Header extends React.Component{
                     </Col>
                     <Col span="20" className="weather">
                         <span className="date">{this.state.sysTime}</span>
-                        <span className="weather-detail">晴转多云</span>
+                        <span className="weather-img">
+                            <img src={this.state.dayPictureUrl} alt="" />
+                        </span>
+                        <span className="weather-detail">
+                            {this.state.city}：{this.state.weather}
+                        </span>
                     </Col>
                 </Row>
             </div>
