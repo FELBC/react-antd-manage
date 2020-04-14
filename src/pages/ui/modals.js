@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Button, Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons'
 import './ui.less';
 
 export default class Modals extends React.Component{
