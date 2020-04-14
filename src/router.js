@@ -4,6 +4,7 @@ import App from './App';
 import Login from './pages/login';
 import Admin from './admin';
 import Buttons from './pages/ui/buttons';
+import Modals from './pages/ui/modals';
 import NoMatch from './pages/nomatch';
 import Home from './pages/home';
 
@@ -19,6 +20,7 @@ export default class IRouter extends React.Component{
                             <Switch>
                                 <Route path="/admin/home" component={Home} />
                                 <Route path="/admin/ui/buttons" component={Buttons} />
+                                <Route path="/admin/ui/modals" component={Modals} />
                                 <Route component={NoMatch} />
                             </Switch>
                         </Admin>

@@ -33,7 +33,7 @@ export default class Buttons extends React.Component{
 
     render(){
         return(
-            <div className="button-wrap">
+            <div className="ui-wrap">
                 <div className="card">
                     <Card title="基础按钮" className="card-wrap"> 
                         <Button type="primary">按钮1</Button>
