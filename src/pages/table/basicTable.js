@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, Table } from 'antd';
 import axios from './../../axios/index';
+// 数据字典
+import * as DictionaryConfig from './../../config/dictionaryConfig'
 
 export default class BasicTable extends React.Component{
 
@@ -55,7 +57,8 @@ export default class BasicTable extends React.Component{
             data:{
                 params:{
                     page:1
-                }
+                },
+                // isShowLoading:false
             }
         }).then((res)=>{
             if(res.code === 0){
@@ -65,7 +68,6 @@ export default class BasicTable extends React.Component{
             }
         })
     }
-
 
     render(){
         const columns = [
@@ -79,15 +81,27 @@ export default class BasicTable extends React.Component{
             },
             {
                 title:'性别',
-                dataIndex:'sex'
+                dataIndex:'sex',
+                // 字段格式化
+                render(sex){
+                    return sex === 1 ? '男':'女'
+                }
             },
             {
                 title:'状态',
-                dataIndex:'state'
+                dataIndex:'state',
+                render(state){
+                    let config = DictionaryConfig.State;
+                    return config[state];
+                }
             },
             {
                 title:'爱好',
-                dataIndex:'interest'
+                dataIndex:'interest',
+                render(interest){
+                    let config = DictionaryConfig.Interest;
+                    return config[interest];
+                }
             },
             {
                 title:'生日',
