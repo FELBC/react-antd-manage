@@ -27,8 +27,8 @@ export default class Axios{
                 loading = document.getElementById('ajaxLoading');
                 loading.style.display = 'block';
             }
-            let baseApi = "https://easy-mock.com/mock/5e96cf2ed14de26af733ce8f/api/"; // easy-mock接口模拟baseApi
-            // let baseApi = "/api/"; // 本地node服务路径public/api
+            // let baseApi = "https://easy-mock.com/mock/5e96cf2ed14de26af733ce8f/api/"; // easy-mock接口模拟baseApi
+            let baseApi = "/api/"; // 本地node服务路径public/api
             axios({
                 url:options.url,
                 method:"get",

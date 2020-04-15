@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Table } from 'antd';
+import { Card, Table, Button, message } from 'antd';
 import axios from './../../axios/index';
 // 数据字典
 import * as DictionaryConfig from './../../config/dictionaryConfig'
@@ -56,8 +56,8 @@ export default class BasicTable extends React.Component{
     // 动态获取mock数据
     request = () => {
         axios.ajax({
-            url:'table/list', // easy-mock模拟接口
-            // url:'tableList.json', // 本地public/api模拟json
+            // url:'table/list', // easy-mock模拟接口
+            url:'tableList.json', // 本地public/api模拟json
             data:{
                 params:{
                     page:1
@@ -71,7 +71,9 @@ export default class BasicTable extends React.Component{
                     item.key = index;
                 })
                 this.setState({
-                    dataSource2:res.result
+                    dataSource2:res.result,
+                    selectedRowKeys:[],
+                    selectedRows:null
                 })
             }
         })
@@ -89,6 +91,36 @@ export default class BasicTable extends React.Component{
             selectedItem:record
         });
     }
+
+    //多选执行删除动作
+    handleDelete = (() => {
+        let rows = this.state.selectedRows;
+        let ids = [];
+        if(rows && rows.length > 0){
+            rows.map((item)=>{
+                ids.push(item.id)
+            });
+            Modal.confirm({
+                title:'删除提示',
+                content:`您确定要删除${ids.join(',')}这些数据吗？`,
+                onOk:()=>{
+                    // let dataSource2 = this.state.dataSource2;
+                    // this.setState({
+                    //     dataSource2:dataSource2.filter((item)=>{
+                    //         return !ids.includes(item.id);
+                    //     }),
+                    //     selectedRows:[]
+                    // });
+                    message.success('删除成功');
+                    //刷新数据
+                    this.request();
+
+                }
+            });
+        }else{
+            message.warning('请选择需要删除的行！');
+        }
+    });
 
     render(){
         const columns = [
@@ -137,10 +169,27 @@ export default class BasicTable extends React.Component{
                 dataIndex:'time'
             }
         ];
+        // 单选表格
         const { selectedRowKeys } = this.state;
         const rowSelection = {
             type:'radio',
             selectedRowKeys
+        }
+        // 复选表格
+        const rowCheckSelection = {
+            type:'checkbox',
+            selectedRowKeys,
+            onChange:(selectedRowKeys,selectedRows) => {
+                let ids = [];
+                selectedRows.map((item) => {
+                    ids.push(item.id);
+                });
+                this.setState({
+                    selectedRowKeys,
+                    selectedRows,
+                    selectedIds:ids
+                });
+            }
         }
         return(
             <div style={{width:'100%'}}>
@@ -160,7 +209,7 @@ export default class BasicTable extends React.Component{
                         pagination={false}
                     />
                 </Card>
-                <Card title="单选-Mock">
+                <Card title="单选-Mock" style={{margin:'10px 0'}}>
                     <Table
                         bordered
                         rowSelection={rowSelection}
@@ -171,6 +220,18 @@ export default class BasicTable extends React.Component{
                               }
                             };
                           }}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                    />
+                </Card>
+                <Card title="复选-Mock">
+                    <div style={{marginBottom:10}}>
+                          <Button type="primary" danger onClick={this.handleDelete}>批量删除</Button>
+                    </div>
+                    <Table
+                        bordered
+                        rowSelection={rowCheckSelection}
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
