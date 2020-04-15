@@ -11,6 +11,10 @@ import Messages from './pages/ui/messages';
 import Tabs from './pages/ui/tabs';
 import Gallery from './pages/ui/gallery';
 import Carousel from './pages/ui/carousel';
+import FormLogin from './pages/form/login';
+import FormDemo from './pages/form/formDemo';
+import LoginDemo from './pages/form/loginDemo';
+import RegDemo from './pages/form/regDemo';
 import NoMatch from './pages/nomatch';
 import Home from './pages/home';
 
@@ -33,6 +37,10 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/ui/tabs" component={Tabs} />
                                 <Route path="/admin/ui/gallery" component={Gallery} />
                                 <Route path="/admin/ui/carousel" component={Carousel} />
+                                <Route path="/admin/form/login" component={FormLogin} />
+                                <Route path="/admin/form/formDemo" component={FormDemo} />
+                                <Route path="/admin/form/loginDemo" component={LoginDemo} />
+                                <Route path="/admin/form/regDemo" component={RegDemo} />
                                 <Route component={NoMatch} />
                             </Switch>
                         </Admin>
