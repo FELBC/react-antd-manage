@@ -1,6 +1,6 @@
 import Mock from 'mockjs'
 
-// mock后台接口数据
+// mock后台接口数据测试
 const MockTest =  Mock.mock(/api\/mock\/test/, 'get', {
     "code":0,
     "msg":"成功或者失败提示信息",
@@ -52,8 +52,33 @@ const MockTest =  Mock.mock(/api\/mock\/test/, 'get', {
             'regexp': /[a-z][A-Z][0-9]/,
         }]
     }
+});
+
+// 城市管理列表api
+const OpenCity = Mock.mock(/open_city/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息",
+    "result":{
+        "page":1,
+        "page_size":10,
+        "total_count":60,
+        "page_count":6,
+        "item_list|10":[{
+            "id|+1":1,
+            "name":"@city",
+            "mode|1-2":1,
+            "op_mode|1-2":1,
+            "franchisee_id":77,
+            "franchisee_name":"松果自营",
+            "city_admins|1-2":[{
+                "user_name":"@cname",
+                "user_id|+1":10001
+            }],
+            "open_time":"@datetime",
+            "sys_user_name":"@cname",
+            "update_time":1520476737000
+        }]
+    }
 })
 
-//
-
-export default {MockTest};
+export default {MockTest,OpenCity};
