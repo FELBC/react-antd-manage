@@ -1,4 +1,6 @@
 // 数据字典
+import React from 'react';
+import { Badge } from 'antd';
 
 const State = {
     '1':'咸鱼一条',
@@ -17,5 +19,13 @@ const Interest = {
     '7':'桌球',
     '8':'麦霸'
 };
+//状态徽标
+const BadgeInterest = {
+    '1':<Badge status="success" text="成功" />,
+    '2':<Badge status="error" text="报错" />,
+    '3':<Badge status="default" text="正常" />,
+    '4':<Badge status="processing" text="进行中" />,
+    '5':<Badge status="warning" text="警告" />
+};
 
-export { State, Interest };
+export { State, Interest, BadgeInterest };

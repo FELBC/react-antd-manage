@@ -44,6 +44,25 @@ export default class HighTable extends React.Component{
         })
     }
 
+    handleChange = (pagination,filters,sorter) => {
+        this.setState({
+            sortOrder:sorter.order
+        })
+    }
+
+    //删除操作
+    handleDelete = (item) => {
+        let id = item.id;
+        Modal.confirm({
+            title:'确认',
+            content:`您确认要删除${id}这条数据吗？`,
+            onOk:()=>{
+                message.success('删除成功');
+                this.request();
+            }
+        })
+    }
+
     render(){
         const columns = [
             {
@@ -196,6 +215,122 @@ export default class HighTable extends React.Component{
                 dataIndex:'time'
             }
         ];
+        const columns3 = [
+            {
+                title:'id',
+                dataIndex:'id'
+            },
+            {
+                title:'用户名',
+                dataIndex:'userName'
+            },
+            {
+                title:'性别',
+                dataIndex:'sex',
+                // 字段格式化
+                render(sex){
+                    return sex === 1 ? '男':'女'
+                }
+            },
+            {
+                title:'年龄',
+                dataIndex:'age',
+                sorter:(a,b)=>{
+                    return a.age-b.age;
+                },
+                sorterOrder:this.state.sortOrder
+            },
+            {
+                title:'状态',
+                dataIndex:'state',
+                render(state){
+                    let config = DictionaryConfig.State;
+                    return config[state];
+                }
+            },
+            {
+                title:'爱好',
+                dataIndex:'interest',
+                render(interest){
+                    let config = DictionaryConfig.Interest;
+                    return config[interest];
+                }
+            },
+            {
+                title:'生日',
+                dataIndex:'birthday'
+            },
+            {
+                title:'地址',
+                dataIndex:'address'
+            },
+            {
+                title:'早起时间',
+                dataIndex:'time'
+            }
+        ];
+        const columns4 = [
+            {
+                title:'id',
+                dataIndex:'id'
+            },
+            {
+                title:'用户名',
+                dataIndex:'userName'
+            },
+            {
+                title:'性别',
+                dataIndex:'sex',
+                // 字段格式化
+                render(sex){
+                    return sex === 1 ? '男':'女'
+                }
+            },
+            {
+                title:'年龄',
+                dataIndex:'age',
+            },
+            {
+                title:'状态',
+                dataIndex:'state',
+                render(state){
+                    let config = DictionaryConfig.State;
+                    return config[state];
+                }
+            },
+            {
+                title:'爱好',
+                dataIndex:'interest',
+                render(interest){
+                    let config = DictionaryConfig.BadgeInterest;
+                    return config[interest];
+                }
+            },
+            {
+                title:'生日',
+                dataIndex:'birthday'
+            },
+            {
+                title:'地址',
+                dataIndex:'address'
+            },
+            {
+                title:'操作',
+                // 不使用箭头函数会有this指针拿不到产生的错误
+                // 使用箭头函数将作用域指向调用方法本身
+                render:(text,item) => {
+                    return (
+                        <Button 
+                            type="primary" 
+                            danger size="small" 
+                            onClick={() => {this.handleDelete(item)}}>
+                            删除
+                        </Button>
+                    )
+                }
+            }
+        ];
+
         return(
             <div style={{width:'100%'}}>
                 <Card title="头部固定" style={{margin:'10px 0'}}>
@@ -214,6 +349,23 @@ export default class HighTable extends React.Component{
                         dataSource={this.state.dataSource}
                         pagination={false}
                         scroll={{x:1800}}
+                    />
+                </Card>
+                <Card title="表格排序" style={{margin:'10px 0'}}>
+                    <Table
+                        bordered
+                        columns={columns3}    
+                        dataSource={this.state.dataSource}
+                        pagination={false}
+                        onChange={this.handleChange}
+                    />
+                </Card>
+                <Card title="操作按钮" style={{margin:'10px 0'}}>
+                    <Table
+                        bordered
+                        columns={columns4}    
+                        dataSource={this.state.dataSource}
+                        pagination={false}
                     />
                 </Card>
             </div>
