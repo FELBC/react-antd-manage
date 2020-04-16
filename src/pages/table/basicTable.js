@@ -4,12 +4,17 @@ import axios from './../../axios/index';
 // 数据字典
 import * as DictionaryConfig from './../../config/dictionaryConfig'
 import Modal from 'antd/lib/modal/Modal';
+import Utils from './../../utils/utils';
 
 export default class BasicTable extends React.Component{
 
     state={
         dataSource2:[]
     };
+
+    params = {
+        page:1
+    }
 
     componentDidMount(){
         const dataSource = [
@@ -55,25 +60,30 @@ export default class BasicTable extends React.Component{
 
     // 动态获取mock数据
     request = () => {
+        let _this = this;
         axios.ajax({
             // url:'table/list', // easy-mock模拟接口
             url:'tableList.json', // 本地public/api模拟json
             data:{
                 params:{
-                    page:1
+                    page:this.params.page
                 },
                 // isShowLoading:false
             }
         }).then((res)=>{
             if(res.code === 0){
                 // 动态添加key，消除控制台表格循环因为没有key红色警告
-                res.result.map((item,index) => {
+                res.result.list.map((item,index) => {
                     item.key = index;
                 })
                 this.setState({
-                    dataSource2:res.result,
+                    dataSource2:res.result.list,
                     selectedRowKeys:[],
-                    selectedRows:null
+                    selectedRows:null,
+                    pagination:Utils.pagination(res,(current)=>{
+                        _this.params.page = current;
+                        this.request();
+                    })
                 })
             }
         })
@@ -225,7 +235,7 @@ export default class BasicTable extends React.Component{
                         pagination={false}
                     />
                 </Card>
-                <Card title="复选-Mock">
+                <Card title="复选-Mock" style={{margin:'10px 0'}}>
                     <div style={{marginBottom:10}}>
                           <Button type="primary" danger onClick={this.handleDelete}>批量删除</Button>
                     </div>
@@ -235,6 +245,14 @@ export default class BasicTable extends React.Component{
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
+                    />
+                </Card>
+                <Card title="表格分页-Mock" style={{margin:'10px 0'}}>
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={this.state.pagination}
                     />
                 </Card>
             </div>
