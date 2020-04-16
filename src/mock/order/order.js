@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
 
-export default Mock.mock(/getdata1/, 'get', {
+// mock后台接口数据
+const OrderTest =  Mock.mock(/api\/mock\/test/, 'get', {
     "code":0,
     "msg":"成功或者失败提示信息",
     "result":{
@@ -52,3 +53,5 @@ export default Mock.mock(/getdata1/, 'get', {
         }]
     }
 })
+
+export default {OrderTest};
