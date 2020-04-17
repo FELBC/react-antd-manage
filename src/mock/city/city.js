@@ -54,15 +54,15 @@ const MockTest =  Mock.mock(/api\/mock\/test/, 'get', {
     }
 });
 
-// 城市管理列表api
+// 城市管理列表API
 const OpenCity = Mock.mock(/open_city/, 'get', {
     "code":0,
     "msg":"成功或失败提示信息",
     "result":{
         "page":1,
         "page_size":10,
-        "total_count":60,
-        "page_count":6,
+        "total":100,
+        "page_count":10,
         "item_list|10":[{
             "id|+1":1,
             "name":"@city",
@@ -81,4 +81,14 @@ const OpenCity = Mock.mock(/open_city/, 'get', {
     }
 })
 
-export default {MockTest,OpenCity};
+// 开通城市API
+const CityOpen =  Mock.mock(/api\/city\/open/, 'get', {
+    "code":0,
+    "result":"开通成功!"
+});
+
+export default {
+    MockTest,
+    OpenCity,
+    CityOpen
+};
