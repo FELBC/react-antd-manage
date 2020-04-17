@@ -1,4 +1,4 @@
-import * as city from './city/city';
-import * as order from './order/order';
+import * as city from './city';
+import * as order from './order';
 
 export default { city, order };
