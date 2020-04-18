@@ -27,7 +27,7 @@ export default class Order extends React.Component{
     state = {
         list:[],
         orderInfo:{},
-        orderConfirmVisible:false
+        orderConfirmVisible:false // 订单确认
     }
     params={
         page:1
@@ -116,9 +116,76 @@ export default class Order extends React.Component{
         })
     }
 
-    onFinish = values => {
-        console.log(values);
-    };
+    // 表格行点击
+    onRowClick = (record,index) => {
+        let selectKey = [index];
+        this.setState({
+            selectedRowKeys:selectKey,
+            selectedItem:record
+        });
+    }
+
+    // 订单结束确认
+    handleConfirm = () => {
+        let item = this.state.selectedItem;
+        if(!item){
+            Modal.info({
+                title:'信息',
+                content:'请选择一条订单进行结束'
+            })
+            return;
+        }
+        axios.ajax({
+            url:'/order/ebike_info',
+            data:{
+                params:{
+                    orderId:item.id
+                }
+            }
+        }).then((res) => {
+            if(res.code === 0){
+                let orderInfo = res.result;
+                this.setState({
+                    orderInfo,
+                    orderConfirmVisible:true
+                });
+            }
+        });
+    }
+
+    // 结束订单
+    handleFinishOrder = ()=> {
+        let item = this.state.selectedItem;
+        axios.ajax({
+            url:'order/finish_order',
+            data:{
+                params:{
+                    orderId:item.id
+                }
+            }
+        }).then((res)=>{
+            if(res.code === 0){
+                message.success("订单结束成功");
+                this.setState({
+                    orderConfirmVisible:false
+                });
+                this.requestList();
+            }
+        });
+    }
+
+    // 订单详情
+    openOrderDetail = ()=>{
+        let item = this.state.selectedItem;
+        if(!item){
+            Modal.info({
+                title:'信息',
+                content:'请先选择一条订单'
+            })
+            return;
+        }
+        window.open(`/#/common/order/detail/${item.id}`,'_blank');
+    }
 
     render(){
         const columns = [
@@ -171,6 +238,11 @@ export default class Order extends React.Component{
             }
 
         ];
+        const selectedRowKeys = this.state.selectedRowKeys;
+        const rowSelection = {
+            type:'radio',
+            selectedRowKeys
+        };
         return (
             <div style={{width:"100%"}}>
                 <Card>
@@ -186,8 +258,44 @@ export default class Order extends React.Component{
                         columns={columns}
                         dataSource={this.state.list}
                         pagination={this.state.pagination}
+                        rowSelection={rowSelection}
+                        onRow={(record,index) => {
+                            return{
+                                onClick:()=>{
+                                    this.onRowClick(record,index);
+                                }
+                            };
+                        }}
                     />
                 </div>
+                <Modal
+                        title="结束订单"
+                        visible={this.state.orderConfirmVisible}
+                        onCancel={()=>{
+                            this.setState({
+                                orderConfirmVisible:false
+                            })
+                        }}
+                        onOk={this.handleFinishOrder}
+                        width={600}
+                >
+                        <Form
+                            layout="horizontal">
+                            <Form.Item label="车辆编号" >
+                                {this.state.orderInfo.bike_sn}
+                            </Form.Item>
+                            <Form.Item label="剩余电量" >
+                                {this.state.orderInfo.battery + '%'}
+                            </Form.Item>
+                            <Form.Item label="行程开始时间" >
+                                {this.state.orderInfo.start_time}
+                            </Form.Item>
+                            <Form.Item label="当前位置" >
+                                {this.state.orderInfo.location}
+                            </Form.Item>
+                        </Form>
+                        
+                </Modal>
             </div>
         );
     }

@@ -27,6 +27,27 @@ const OrderList = Mock.mock(/api\/order\/list/, 'get', {
     }
 })
 
+// 订单结束确认API
+const OrderEbikeInfo = Mock.mock(/api\/order\/ebike_info/,'get',{
+    "code":0,
+    "msg":"成功或失败提示信息",
+    "result":{
+        "id":27296,
+        "bike_sn":"800116116",
+        "battery":100,
+        "start_time":"@datetime",
+        "location":"北京市海淀区奥林匹克公园"
+    }
+})
+
+// 结束订单API
+const OrderFinishOrder = Mock.mock(/api\/order\/finish_order/,'get',{
+    "code":0,
+    "result":'ok'
+})
+
 export default {
-    OrderList
+    OrderList,
+    OrderEbikeInfo,
+    OrderFinishOrder
 };
