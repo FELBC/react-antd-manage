@@ -1,3 +1,7 @@
+/**
+ * 主页面结构，入口
+*/
+
 import React from 'react';
 import { Row, Col } from 'antd';
 import Header from './components/Header';

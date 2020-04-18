@@ -21,6 +21,7 @@ import BasicTable from './pages/table/basicTable';
 import HighTable from './pages/table/highTable';
 import City from './pages/city/index';
 import Order from './pages/order/index';
+import Common from './common';
 
 export default class IRouter extends React.Component{
 
@@ -28,6 +29,7 @@ export default class IRouter extends React.Component{
         return (
             <HashRouter>
                 <App>
+                    {/*登录/主页面/订单详情多入口*/}
                     <Route path="/login" component={Login} />
                     <Route path="/admin" render={() => 
                         <Admin>
@@ -53,7 +55,13 @@ export default class IRouter extends React.Component{
                             </Switch>
                         </Admin>
                     } />
-                    {/*<Route path="/order/detail" component={Login} />*/}
+                    <Route path="/common" render={()=>
+                        <Common>
+                            {/* 嵌套各种详情 */}
+                            <Route pat="/common/order/detail/:orderId" component={Login} />
+                        </Common>
+                    }
+                    />
                 </App>
             </HashRouter>
         );

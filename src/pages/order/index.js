@@ -6,13 +6,13 @@ import {
     Form,
     Select,
     Modal,
-    Radio,
     message,
     DatePicker
 } from 'antd';
 import axios from './../../axios/index';
 import Utils from './../../utils/utils';
 import './../../mock/index';
+import BaseForm from './../../components/BaseFrom';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -24,17 +24,71 @@ const layout = {
 
 export default class Order extends React.Component{
 
-    formRef = React.createRef();
-
     state = {
-        list:[]
+        list:[],
+        orderInfo:{},
+        orderConfirmVisible:false
     }
     params={
         page:1
     }
+    formList = [
+        {
+            type:'SELECT',
+            name:'city',
+            label:'城市',
+            placeholder:'全部',
+            initialValue:'1',
+            required:true,
+            width:120,
+            list:[
+                {id:'0',name:'全部'},
+                {id:'1',name:'北京'},
+                {id:'2',name:'天津'},
+                {id:'3',name:'上海'}
+            ]
+        },
+        {
+            type:'DATERANGE',
+            name:'orderTime',
+            label:'订单时间',
+            placeholder:['开始时间','结束时间'],
+            required:true,
+            width:350,
+            format:'YYYY-MM-DD'
+        },
+        {
+            type:'SELECT',
+            name:'status',
+            label:'订单状态',
+            placeholder:'全部',
+            initialValue:"1",
+            required:true,
+            width:80,
+            list:[
+                {id:"0",name:'全部'},
+                {id:'1',name:'进行中'},
+                {id:'2',name:'结束行程'}
+            ]
+        }
+    ]
 
     componentDidMount(){
         this.requestList();
+    }
+
+    // 查询
+    handleFilter = (params) => {
+        this.params = params;
+        if(this.params.city === undefined){
+            message.warning('请选择城市')
+        }else if(this.params.orderTime === undefined){
+            message.warning('请选择开始时间和结束时间')
+        }else if(this.params.status === undefined){
+            message.warning('请选择订单状态')
+        }else{
+            this.requestList();
+        }
     }
 
     // 订单列表
@@ -62,11 +116,6 @@ export default class Order extends React.Component{
         })
     }
 
-    // 重置
-    onReset = () => {
-        this.formRef.current.resetFields();
-    }
-
     onFinish = values => {
         console.log(values);
     };
@@ -91,7 +140,10 @@ export default class Order extends React.Component{
             },
             {
                 title:'里程',
-                dataIndex:'distance'
+                dataIndex:'distance',
+                render(distance){
+                    return distance/1000 + 'Km';
+                }
             },
             {
                 title:'行驶时长',
@@ -122,63 +174,11 @@ export default class Order extends React.Component{
         return (
             <div style={{width:"100%"}}>
                 <Card>
-                <Form 
-                    layout="inline"
-                    ref={this.formRef} 
-                    name="control-ref" 
-                    onFinish={this.onFinish} 
-                    initialValues={{
-                        city: '0',
-                        orderTime:'',
-                        status:'0'
-                    }}
-                >
-                    <Form.Item 
-                        name="city" 
-                        label="城市" 
-                        rules={[{ required: true }]} 
-                        style={{width:'120px'}}
-                    >
-                        <Select
-                            allowClear
-                        >
-                            <Option value="0">全部</Option>
-                            <Option value="1">北京</Option>
-                            <Option value="2">天津</Option>
-                            <Option value="3">深圳</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item 
-                        name="orderTime" 
-                        label="订单时间" 
-                        rules={[{ required: true }]}
-                        style={{width:'350px'}}  
-                    >
-                        <RangePicker />
-                    </Form.Item>
-                    <Form.Item 
-                        name="status" 
-                        label="订单状态" 
-                        rules={[{ required: true }]}
-                        style={{width:'200px'}}  
-                    >
-                        <Select
-                            allowClear
-                        >
-                            <Option value="0">全部</Option>
-                            <Option value="1">进行中</Option>
-                            <Option value="2">结束行程</Option>
-                        </Select>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" style={{margin:'0 20px'}} onClick={this.requestList}>查询</Button>
-                        <Button onClick={this.onReset}>重置</Button>
-                    </Form.Item>
-                </Form>
+                    <BaseForm formList={this.formList} filterSubmit={this.handleFilter} />
                 </Card>
                 <Card style={{marginTop:10}}>
-                    <Button>订单详情</Button>
-                    <Button>结束订单</Button>
+                    <Button type="primary" onClick={this.openOrderDetail}>订单详情</Button>
+                    <Button type="primary" style={{marginLeft:10}} onClick={this.handleConfirm}>结束订单</Button>
                 </Card>
                 <div className="content-wrap">
                     <Table 
