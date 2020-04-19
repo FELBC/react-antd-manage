@@ -3,7 +3,8 @@ import {
     Button,
     Form,
     Select,
-    DatePicker
+    DatePicker,
+    Input
 } from 'antd';
 import Utils from './../../utils/utils';
 
@@ -45,6 +46,18 @@ export default class FilterForm extends React.Component{
                             />
                         </Form.Item>
                     formItemList.push(DATERANGE);
+                }else if(item.type === 'INPUT'){
+                    const INPUT = 
+                        <Form.Item 
+                            key={item.name}
+                            name={item.name}
+                            label={item.label}
+                            rules={[{ required: item.required }]} 
+                            style={{width:item.width}}  
+                        >
+                            <Input type="text" placeholder={item.placeholder} />
+                        </Form.Item>
+                    formItemList.push(INPUT);
                 }else if(item.type === 'SELECT'){
                     const SELECT = 
                         <Form.Item 
@@ -60,6 +73,21 @@ export default class FilterForm extends React.Component{
                             </Select>
                         </Form.Item>
                     formItemList.push(SELECT);
+                }else if(item.type === 'DATE'){
+                    const DATE = 
+                        <Form.Item 
+                            key={item.name}
+                            name={item.name}
+                            label={item.label}
+                            rules={[{ required: item.required }]}
+                            style={{width:item.width}}  
+                        >
+                            <DatePicker  
+                                format={item.format}
+                                placeholder={item.placeholder} 
+                            />
+                        </Form.Item>
+                    formItemList.push(DATE);
                 }
             });
         }

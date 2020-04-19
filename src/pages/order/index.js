@@ -10,8 +10,8 @@ import {
 import axios from './../../axios/index';
 import Utils from './../../utils/utils';
 import './../../mock/index';
-import BaseForm from './../../components/BaseFrom';
-import API from './../../api/index';
+import BaseForm from './../../components/BaseForm';
+import API from './../../api';
 
 export default class Order extends React.Component{
 

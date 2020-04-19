@@ -14,7 +14,7 @@ import Utils from './../../utils/utils';
 // 异步请求拦截,返回mock数据,解决easy-mock服务器老是挂掉问题
 // 真实接口有了之后可以删除该拦截获取接口数据
 import './../../mock/index';
-import API from './../../api/index';
+import API from './../../api';
 
 const { Option } = Select;
 const layout = {
