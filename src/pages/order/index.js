@@ -4,24 +4,14 @@ import {
     Button,
     Table,
     Form,
-    Select,
     Modal,
-    message,
-    DatePicker
+    message
 } from 'antd';
 import axios from './../../axios/index';
 import Utils from './../../utils/utils';
 import './../../mock/index';
 import BaseForm from './../../components/BaseFrom';
 import API from './../../api/index';
-
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-
-const layout = {
-  labelCol:{ span:8 },
-  wrapperCol:{ span:16 }
-};
 
 export default class Order extends React.Component{
 
@@ -94,27 +84,7 @@ export default class Order extends React.Component{
 
     // 订单列表
     requestList = () => {
-        let _this = this;
-        axios.ajax({
-            url:API.orderListApi,
-            data:{
-                params:{
-                    page:this.params.page
-                }
-            }
-        }).then((res)=>{
-            let list = res.result.item_list.map((item,index)=>{
-                item.key = index;
-                return item;
-            });
-            this.setState({
-                list,
-                pagination:Utils.pagination(res,(current)=>{
-                    _this.params.page = current;
-                    _this.requestList();
-                })
-            });
-        })
+        axios.requestList(this,API.orderListApi,this.params,true);
     }
 
     // 表格行点击

@@ -1,8 +1,10 @@
 import JsonP from 'jsonp';
 import axios from 'axios';
 import { Modal } from 'antd';
+import Utils from './../utils/utils';
 
 export default class Axios{
+
     static jsonp(options){
         // Promise封装，返回jsonp调用
         return new Promise((resolve,reject) => {
@@ -27,8 +29,14 @@ export default class Axios{
                 loading = document.getElementById('ajaxLoading');
                 loading.style.display = 'block';
             }
-            // let baseApi = "https://easy-mock.com/mock/5e96cf2ed14de26af733ce8f/api/"; // easy-mock接口模拟baseApi
-            let baseApi = "/api/"; // 本地node服务路径public/api
+            // isMock判断，走不同地址
+            let baseApi = '';
+            if(options.data.isMock){
+                baseApi = "https://easy-mock.com/mock/5e96cf2ed14de26af733ce8f/api/"; // easy-mock接口模拟baseApi
+                baseApi = "/api/"; // 本地node服务路径public/api
+            }else{
+                baseApi = "/api/"; // 真实请求地址
+            }
             axios({
                 url:options.url,
                 method:"get",
@@ -54,6 +62,32 @@ export default class Axios{
                     reject(response.data);
                 }
             })
+        });
+    }
+
+    // 列表请求统一封装(存在大量业务代码复用)
+    static  requestList(_this,url,params,isMock){
+        var data = {
+            params:params,
+            isMock
+        }
+        this.ajax({
+            url,
+            data,
+        }).then((data)=>{
+            if(data && data.result){
+                let list = data.result.item_list.map((item,index)=>{
+                    item.key = index;
+                    return item;
+                });
+                _this.setState({
+                    list,
+                    pagination:Utils.pagination(data,(current)=>{
+                        _this.params.page = current;
+                        _this.requestList();
+                    })
+                });
+            }
         });
     }
 }
