@@ -13,6 +13,7 @@ import axios from './../../axios/index';
 import Utils from './../../utils/utils';
 import './../../mock/index';
 import BaseForm from './../../components/BaseFrom';
+import API from './../../api/index';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -95,7 +96,7 @@ export default class Order extends React.Component{
     requestList = () => {
         let _this = this;
         axios.ajax({
-            url:'/order/list',
+            url:API.orderListApi,
             data:{
                 params:{
                     page:this.params.page
@@ -136,7 +137,7 @@ export default class Order extends React.Component{
             return;
         }
         axios.ajax({
-            url:'/order/ebike_info',
+            url:API.orderEbikeInfoApi,
             data:{
                 params:{
                     orderId:item.id
@@ -157,7 +158,7 @@ export default class Order extends React.Component{
     handleFinishOrder = ()=> {
         let item = this.state.selectedItem;
         axios.ajax({
-            url:'order/finish_order',
+            url:API.orderFinishOrderApi,
             data:{
                 params:{
                     orderId:item.id
@@ -177,6 +178,7 @@ export default class Order extends React.Component{
     // 订单详情
     openOrderDetail = ()=>{
         let item = this.state.selectedItem;
+        console.log(item);
         if(!item){
             Modal.info({
                 title:'信息',

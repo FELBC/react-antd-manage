@@ -22,6 +22,7 @@ import HighTable from './pages/table/highTable';
 import City from './pages/city/index';
 import Order from './pages/order/index';
 import Common from './common';
+import OrderDetail from './pages/order/detail';
 
 export default class IRouter extends React.Component{
 
@@ -58,7 +59,7 @@ export default class IRouter extends React.Component{
                     <Route path="/common" render={()=>
                         <Common>
                             {/* 嵌套各种详情 */}
-                            <Route pat="/common/order/detail/:orderId" component={Login} />
+                            <Route pat="/common/order/detail/:orderId" component={OrderDetail} />
                         </Common>
                     }
                     />
