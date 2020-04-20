@@ -1,11 +1,22 @@
 import React from 'react';
 import {
-    Card,
-    Button,
-    message
+    Card, 
+    Button, 
+    Table, 
+    Form, 
+    Input, 
+    Checkbox,
+    Select,
+    Radio, 
+    Icon, 
+    message, 
+    Modal, 
+    DatePicker
 } from 'antd';
 import axios from './../../axios';
 import Utils from './../../utils/utils';
+import ETable from './../../components/ETable/index';
+import Moment from 'moment';
 import BaseForm from './../../components/BaseForm';
 import API from './../../api';
 import {
@@ -13,13 +24,17 @@ import {
     Interest
 } from './../../config/dictionaryConfig';
 
+const { Option } = Select;
+
 export default class User extends React.Component{
 
     params = {
         page:1
     }
 
-    state = {}
+    state = {
+        list:[]
+    }
 
     formList = [
         {
@@ -122,7 +137,18 @@ export default class User extends React.Component{
                     <BaseForm formList={this.formList} filterSubmit={this.handleFilter} />
                 </Card>
                 <div className="content-wrap">
-                    {JSON.stringify(this.state.list)}
+                    <ETable 
+                        columns = {columns}
+                        updateSelectedItem = {Utils.updateSelectedItem.bind(this)}
+                        selectedRowKeys = {this.state.selectedRowKeys}
+                        selectedItem = {this.state.selectedItem}
+                        dataSource = {this.state.list}
+                        pagination = {this.state.pagination}
+                        rowSelectionType = "checkbox" // 单选/复选/没有就不加
+                    />
+                    {/*{JSON.stringify(this.state.selectedRowKeys)}
+                    {JSON.stringify(this.state.selectedItem)}
+                    {JSON.stringify(this.state.selectedIds)}*/}
                 </div>
             </div>
         );
