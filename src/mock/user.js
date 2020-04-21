@@ -10,7 +10,7 @@ Mock.mock(/user\/list/, 'get', {
         "total":30,
         "item_list|10":[{
             "id|+1":1,
-            "username":"@cname",
+            "userName":"@cname",
             "sex|1-2":1,
             "state|1-5":1,
             "interest|1-8":1,
@@ -20,4 +20,24 @@ Mock.mock(/user\/list/, 'get', {
             "time":"09:00:00"
         }]
     }
+})
+
+// 创建员工API
+Mock.mock(/user\/add/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息",
+    "result":"ok"
+})
+
+// 编辑员工API
+Mock.mock(/user\/edit/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息",
+    "result":"ok"
+})
+
+// 删除员工API
+Mock.mock(/user\/delete/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息"
 })
