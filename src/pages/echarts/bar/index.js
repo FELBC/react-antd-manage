@@ -14,45 +14,67 @@ import ReactEcharts from 'echarts-for-react';
 
 export default class Bar extends React.Component{
 
-    componentDidMount(){
+    UNSAFE_componentWillMount(){
         echarts.registerTheme('macarons',echartTheme);
     }
 
     getOption = () => {
         let option = {
-            color: ['#3398DB'],
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-                    type: 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                }
+            title:{
+                text:'用户骑行订单'
             },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
+            tooltip:{
+                trigger:'axis'
             },
-            xAxis: [
+            xAxis:{
+                data:['周一','周二','周三','周四','周五','周六','周日']
+            },
+            yAxis:{
+                type:'value'
+            },
+            series:[
                 {
-                    type: 'category',
-                    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                    axisTick: {
-                        alignWithLabel: true
-                    }
+                    name:'订单量',
+                    type:'bar',
+                    data:[1000,2000,1500,3000,2000,1200,800]
                 }
-            ],
-            yAxis: [
+            ]
+        };
+        return option;
+    }
+
+    getOption2 = () => {
+        let option = {
+            title:{
+                text:'用户骑行订单'
+            },
+            legend:{
+                data:['OFO','膜拜','小蓝']
+            },
+            tooltip:{
+                trigger:'axis'
+            },
+            xAxis:{
+                data:['周一','周二','周三','周四','周五','周六','周日']
+            },
+            yAxis:{
+                type:'value'
+            },
+            series:[
                 {
-                    type: 'value'
-                }
-            ],
-            series: [
+                    name:'OFO',
+                    type:'bar',
+                    data:[2000,3000,1600,3200,1000,2200,1800]
+                },
                 {
-                    name: '直接访问',
-                    type: 'bar',
-                    barWidth: '60%',
-                    data: [10, 52, 200, 334, 390, 330, 220]
+                    name:'膜拜',
+                    type:'bar',
+                    data:[12000,2000,1500,3000,2000,1200,800]
+                },
+                {
+                    name:'小蓝',
+                    type:'bar',
+                    data:[2000,3000,1200,3000,4500,2200,5300]
                 }
             ]
         };
@@ -63,10 +85,10 @@ export default class Bar extends React.Component{
         return(
             <div style={{width:'100%'}}>
                 <Card title="柱形图表之一">
-                    <ReactEcharts option={this.getOption()} theme="macarons" />
+                    <ReactEcharts option={this.getOption()} theme="macarons" style={{height:500}} />
                 </Card>
                 <Card title="柱形图表之二" style={{marginTop:10}}>
-                
+                <ReactEcharts option={this.getOption2()} theme="macarons" style={{height:500}} />
                 </Card>
             </div>
         );
