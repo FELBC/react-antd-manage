@@ -1,7 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import App from './App';
-import Login from './pages/login';
 import Admin from './admin';
 import Buttons from './pages/ui/buttons';
 import Modals from './pages/ui/modals';
@@ -12,9 +11,7 @@ import Tabs from './pages/ui/tabs';
 import Gallery from './pages/ui/gallery';
 import Carousel from './pages/ui/carousel';
 import FormLogin from './pages/form/login';
-import FormDemo from './pages/form/formDemo';
-import LoginDemo from './pages/form/loginDemo';
-import RegDemo from './pages/form/regDemo';
+import Reg from './pages/form/reg';
 import NoMatch from './pages/nomatch';
 import Home from './pages/home';
 import BasicTable from './pages/table/basicTable';
@@ -36,7 +33,7 @@ export default class IRouter extends React.Component{
             <HashRouter>
                 <App>
                     {/*登录/主页面/订单详情多入口*/}
-                    <Route path="/login" component={Login} />
+                    <Route path="/login" component={FormLogin} />
                     <Route path="/admin" render={() => 
                         <Admin>
                             <Switch>
@@ -50,9 +47,7 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/ui/gallery" component={Gallery} />
                                 <Route path="/admin/ui/carousel" component={Carousel} />
                                 <Route path="/admin/form/login" component={FormLogin} />
-                                <Route path="/admin/form/formDemo" component={FormDemo} />
-                                <Route path="/admin/form/loginDemo" component={LoginDemo} />
-                                <Route path="/admin/form/regDemo" component={RegDemo} />
+                                <Route path="/admin/form/reg" component={Reg} />
                                 <Route path="/admin/table/basic" component={BasicTable} />
                                 <Route path="/admin/table/high" component={HighTable} />
                                 <Route path="/admin/city" component={City} />

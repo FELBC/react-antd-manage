@@ -52,14 +52,6 @@ const menuList = [
             {
                 title:'注册',
                 key:'/admin/form/reg',
-            },
-            {
-                title:'登录4.0',
-                key:'/admin/form/loginDemo',
-            },
-            {
-                title:'注册4.0',
-                key:'/admin/form/regDemo',
             }
         ]
     },
