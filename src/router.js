@@ -27,6 +27,7 @@ import OrderDetail from './pages/order/detail';
 import Bar from './pages/echarts/bar';
 import Pie from './pages/echarts/pie';
 import Line from './pages/echarts/line';
+import RichText from './pages/rich';
 
 export default class IRouter extends React.Component{
 
@@ -60,6 +61,7 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/charts/bar" component={Bar} />
                                 <Route path="/admin/charts/pie" component={Pie} />
                                 <Route path="/admin/charts/line" component={Line} />
+                                <Route path="/admin/rich" component={RichText} />
                                 <Route component={NoMatch} />
                             </Switch>
                         </Admin>
