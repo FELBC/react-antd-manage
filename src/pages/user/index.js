@@ -13,7 +13,7 @@ import {
 } from 'antd';
 import axios from './../../axios';
 import Utils from './../../utils/utils';
-import ETable from './../../components/ETable/index';
+import ETable from './../../components/ETable';
 import moment from 'moment';
 import BaseForm from './../../components/BaseForm';
 import API from './../../api';

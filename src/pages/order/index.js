@@ -7,9 +7,9 @@ import {
     Modal,
     message
 } from 'antd';
-import axios from './../../axios/index';
+import axios from './../../axios';
 import Utils from './../../utils/utils';
-import './../../mock/index';
+import './../../mock';
 import BaseForm from './../../components/BaseForm';
 import API from './../../api';
 
