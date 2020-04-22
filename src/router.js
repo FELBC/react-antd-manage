@@ -11,7 +11,7 @@ import Tabs from './pages/ui/tabs';
 import Gallery from './pages/ui/gallery';
 import Carousel from './pages/ui/carousel';
 import FormLogin from './pages/form/login';
-import Reg from './pages/form/reg';
+import Register from './pages/form/register';
 import NoMatch from './pages/nomatch';
 import Home from './pages/home';
 import BasicTable from './pages/table/basicTable';
@@ -47,7 +47,7 @@ export default class IRouter extends React.Component{
                                 <Route path="/admin/ui/gallery" component={Gallery} />
                                 <Route path="/admin/ui/carousel" component={Carousel} />
                                 <Route path="/admin/form/login" component={FormLogin} />
-                                <Route path="/admin/form/reg" component={Reg} />
+                                <Route path="/admin/form/register" component={Register} />
                                 <Route path="/admin/table/basic" component={BasicTable} />
                                 <Route path="/admin/table/high" component={HighTable} />
                                 <Route path="/admin/city" component={City} />

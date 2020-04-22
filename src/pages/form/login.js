@@ -1,5 +1,13 @@
 import React from "react";
-import { Form, Input, Button, Checkbox, Card, Select, message } from 'antd';
+import { 
+    Form, 
+    Input, 
+    Button, 
+    Checkbox, 
+    Card, 
+    Select, 
+    message 
+} from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
@@ -30,7 +38,7 @@ export default class LoginForm extends React.Component{
         // 校验表单字段
         this.horizontalFormRef.current.validateFields().then((values) => {
             message.success(`${userInfo.userName} 恭喜你,您通过本次表单组件学习,当前密码为:${userInfo.password}`)
-            console.log('校验成功，开始发送异步请求...');
+            console.log('校验成功，开始发送登录异步请求...');
         }).catch((errorInfo => {
             console.log('校验失败');
             console.log(errorInfo);
