@@ -6,7 +6,11 @@ const roleListApi = `role/list`;
 // 权限管理角色创建API
 const roleCreateApi = `role/create`;
 
+// 设置权限API
+const permissionEditApi = `permission/edit`;
+
 export default {
     roleListApi,
-    roleCreateApi
+    roleCreateApi,
+    permissionEditApi
 };

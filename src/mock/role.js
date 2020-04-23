@@ -16,13 +16,19 @@ Mock.mock(/role\/list/, 'get', {
             "authorize_user_name": "@cname",
             "authorize_time": 1521270166000,
             "create_time": 1499305790000,
-            "menus": ["/home", "/ui/buttons", "/ui/modals", "/ui/loadings", "/ui/notification", "/ui/messages", "/ui/tabs", "/ui/gallery", "/ui/carousel", "/ui"]
+            "menus": ["/admin/home", "/admin/ui/buttons", "/admin/ui/modals", "/admin/ui/loadings", "/admin/ui/notification", "/admin/ui/messages", "/admin/ui/tabs", "/admin/ui/gallery", "/admin/ui/carousel", "/admin/ui"]
         }]
     }
 })
 
 // 角色创建API
 Mock.mock(/role\/create/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息"
+})
+
+// 设置权限API
+Mock.mock(/permission\/edit/, 'get', {
     "code":0,
     "msg":"成功或失败提示信息"
 })

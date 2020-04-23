@@ -9,7 +9,8 @@ import {
     Radio, 
     message, 
     Modal, 
-    DatePicker
+    DatePicker,
+    Tree
 } from 'antd';
 import ETable from './../../components/ETable';
 import Utils from './../../utils/utils';
@@ -20,8 +21,10 @@ import moment from 'moment';
 import { 
     PlusOutlined
 } from '@ant-design/icons';
+import menuConfig from './../../config/menuConfig';
 
 const { Option } = Select;
+const { TreeNode } = Tree;
 const layout = {
     labelCol:{ span:5 },
     wrapperCol:{ span:16 }
@@ -37,7 +40,7 @@ export default class PermissionUser extends React.Component{
         list:[],
         isRoleVisible:false,
         isPermVisible:false,
-        detailInfo:{}
+        detailInfo:{},
     }
 
     UNSAFE_componentWillMount(){
@@ -85,7 +88,7 @@ export default class PermissionUser extends React.Component{
         }
     }
 
-    // 设置权限
+    // 设置权限模态
     handlePermission = () => {
         let item = this.state.selectedItem;
         if(!item){
@@ -97,7 +100,8 @@ export default class PermissionUser extends React.Component{
         }
         this.setState({
             isPermVisible:true,
-            detailInfo:item
+            detailInfo:item,
+            menuInfo:item.menus
         });
         // initialValues 不能被 setState 动态更新，需要用 setFieldsValue 来更新
         // 修改子组件模态表单值
@@ -107,9 +111,30 @@ export default class PermissionUser extends React.Component{
         });
     }
 
+    // 设置权限提交
     handlePermEditSubmit = () => {
-        this.setState({
-            isPermVisible:false
+        let data = this.refs.permEdit.permEditFormRef.current.getFieldValue();
+        data.role_id = this.state.selectedItem.id;
+        data.menus = this.state.menuInfo
+        axios.ajax({
+            url:API.permissionEditApi,
+            data:{
+                params:{
+                    ...data
+                }
+            }
+        }).then((res) => {
+            if(res.code === 0){
+                message.success('设置权限成功!');
+                this.requestList();
+                setTimeout(()=>{
+                    this.setState({
+                        isPermVisible:false
+                    });
+                },500);    
+            }else{
+                message.error('设置权限失败! ');
+            }
         });
     }
 
@@ -196,6 +221,12 @@ export default class PermissionUser extends React.Component{
                     <PermEditForm 
                         ref='permEdit' 
                         detailInfo={this.state.detailInfo}
+                        menuInfo={this.state.menuInfo}
+                        patchMenuInfo={(checkedKeys)=>{
+                            this.setState({
+                                menuInfo:checkedKeys
+                            });
+                        }}
                     />
                 </Modal>
             </div>
@@ -251,11 +282,36 @@ class PermEditForm extends React.Component{
 
     permEditFormRef = React.createRef();
 
-    state = {}
+    state = {
+        // menuInfo:['/admin/home']
+    }
+
+    // 递归渲染menuConfig
+    renderTreeNodes = (data)=>{
+        return data.map((item) => {
+            if(item.children){
+                return <TreeNode title={item.title} key={item.key}>
+                    {this.renderTreeNodes(item.children)}
+                </TreeNode>
+            }else{
+                return <TreeNode {...item} />
+            }
+        });
+    }
+      
+    onSelect = (selectedKeys, info) => {
+        console.log('selected', selectedKeys, info);
+    };
+      
+    onCheck = (checkedKeys, info) => {
+        // console.log('onCheck', checkedKeys, info);
+        this.props.patchMenuInfo(checkedKeys);
+    };
 
     render(){
         return(
             <div>
+                {JSON.stringify(this.props.menuInfo)}
                 <Form 
                     {...layout} 
                     layout="horizontal"
@@ -282,6 +338,13 @@ class PermEditForm extends React.Component{
                             <Option value={0}>关闭</Option>
                         </Select>
                     </Form.Item>
+                    <Tree
+                        checkable
+                        defaultExpandAll={true}
+                        defaultCheckedKeys={this.props.menuInfo}
+                        onCheck={this.onCheck}
+                        treeData={menuConfig}
+                    />
                 </Form>
             </div>
         );
