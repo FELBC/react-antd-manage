@@ -4,7 +4,6 @@ import {
     Button, 
     Form, 
     Input, 
-    Checkbox,
     Select,
     Radio, 
     message, 
@@ -34,8 +33,6 @@ const layout = {
 };
 
 export default class User extends React.Component{
-
-    formRef = React.createRef();
     
     params = {
         page:1
@@ -44,13 +41,7 @@ export default class User extends React.Component{
     state = {
         list:[],
         isVisible:false,
-        userInfo:{
-            userName:'',
-            sex:1,
-            state:1,
-            birthday:moment(),
-            address:''
-        },
+        userInfo:{},
     }
 
     formList = [
@@ -104,11 +95,46 @@ export default class User extends React.Component{
         axios.requestList(this,'user/list',this.params);
     }
 
+    // 创建员工提交
+    handleSubmit = () => {
+        let type = this.state.type;
+        let data = this.refs.userCrud.formRef.current.getFieldValue();
+        if(!data.userName){
+            message.warning('请输入姓名');
+        }else if(!data.sex){
+            message.warning('请选择性别');
+        }else if(!data.state){
+            message.warning('请选择状态');
+        }else if(!data.birthday){
+            message.warning('请选择生日');
+        }else if(!data.address){
+            message.warning('请输入联系地址');
+        }else{
+            axios.ajax({
+                url:type === 'create'?API.userAddApi:API.userEditApi,
+                data:{
+                    params:{
+                        ...data
+                    }
+                }
+            }).then((res)=>{
+                if(res.code === 0){
+                    message.success(type === 'create'?'创建员工成功!':'编辑员工成功');
+                    this.setState({
+                        isVisible:false
+                    });
+                    this.requestList();
+                    this.refs.userCrud.formRef.current.resetFields();
+                }else{
+                    message.error(type === 'create'?'创建员工失败!':'编辑员工失败');
+                }
+            });
+        }
+    }
+
     // 用户CRUD
     handleOperate = (type) => {
-
         let item = this.state.selectedItem;
-        
         if(type === 'create'){
             this.setState({
                 type,
@@ -116,7 +142,7 @@ export default class User extends React.Component{
                 title:'创建员工',
                 userInfo:{}
             });
-
+            this.refs.userCrud.formRef.current.resetFields();
         }else if(type==='edit' || type==='detail'){
             if(!item){
                 Modal.info({
@@ -128,18 +154,16 @@ export default class User extends React.Component{
             this.setState({
                 title:type==='edit'?'编辑用户':'查看详情',
                 isVisible:true,
-                userInfo:item,
+                // userInfo:item,
                 type
             });
-
-            // initialValues 不能被 setState 动态更新，需要用 setFieldsValue 来更新
-            // this.formRef.current.setFieldsValue({
-            //     userName:this.state.userInfo.userName,
-            //     sex:this.state.userInfo.sex,
-            //     state:this.state.userInfo.state,
-            //     birthday:moment(this.state.userInfo.birthday),
-            //     address:this.state.userInfo.address
-            // });
+            this.refs.userCrud.formRef.current.setFieldsValue({
+                userName:item.userName,
+                sex:item.sex,
+                state:item.state,
+                birthday:moment(item.birthday),
+                address:item.address
+            });
         }else{
             if(!item){
                 Modal.info({
@@ -177,43 +201,6 @@ export default class User extends React.Component{
 
     onFinish = values => {
         console.log(values);
-    }
-
-    // 创建员工提交
-    handleSubmit = () => {
-        let type = this.state.type;
-        let data = this.formRef.current.getFieldValue();
-        if(!data.userName){
-            message.warning('请输入姓名');
-        }else if(!data.sex){
-            message.warning('请选择性别');
-        }else if(!data.state){
-            message.warning('请选择状态');
-        }else if(!data.birthday){
-            message.warning('请选择生日');
-        }else if(!data.address){
-            message.warning('请输入联系地址');
-        }else{
-            axios.ajax({
-                url:type === 'create'?API.userAddApi:API.userEditApi,
-                data:{
-                    params:{
-                        ...data
-                    }
-                }
-            }).then((res)=>{
-                if(res.code === 0){
-                    message.success(type === 'create'?'创建员工成功!':'编辑员工成功');
-                    this.setState({
-                        isVisible:false
-                    });
-                    this.requestList();
-                    this.formRef.current.resetFields();
-                }else{
-                    message.error(type === 'create'?'创建员工失败!':'编辑员工失败');
-                }
-            });
-        }
     }
 
     render(){
@@ -272,69 +259,6 @@ export default class User extends React.Component{
                     <Button type="primary" danger icon={<DeleteOutlined />} onClick={()=>this.handleOperate('delete')}>删除员工</Button>
                 </Card>
                 <div className="content-wrap">
-
-
-                    {/*<Form 
-                        {...layout} 
-                        layout="horizontal"
-                        ref={this.formRef} 
-                        name="control-ref" 
-                        onFinish={this.onFinish} 
-                        initialValues={{
-                            userName:this.state.userInfo.userName,
-                            sex:this.state.userInfo.sex,
-                            state:this.state.userInfo.state,
-                            birthday:moment(this.state.userInfo.birthday),
-                            address:this.state.userInfo.address
-                        }}
-                    >
-                        <Form.Item 
-                            name="userName"
-                            label="姓名"
-                            rules={[{ required: true }]} 
-                        >
-                            <Input type="text" placeholder="请输入姓名" />
-                        </Form.Item>
-                        <Form.Item 
-                            name="sex"
-                            label="性别"
-                            rules={[{ required: true }]} 
-                        >
-                            <Radio.Group>
-                                <Radio value={1}>男</Radio>
-                                <Radio value={2}>女</Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                        <Form.Item name="state" label="状态" rules={[{ required: true }]}>
-                            <Select
-                                allowClear
-                            >
-                                <Option value={1}>咸鱼一条</Option>
-                                <Option value={2}>风华浪子</Option>
-                                <Option value={3}>北大才子一枚</Option>
-                                <Option value={4}>百度FE</Option>
-                                <Option value={5}>创业者</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item 
-                            name="birthday"
-                            label="生日"
-                            rules={[{ required: true }]}
-                        >
-                            <DatePicker  
-                                format='YYYY-MM-DD'
-                            />
-                        </Form.Item>
-                        <Form.Item 
-                            name="address"
-                            label="联系地址"
-                            rules={[{ required: true }]} 
-                        >
-                            <Input.TextArea row={3} placeholder="请输入联系地址" />
-                        </Form.Item>
-                    </Form>*/}
-
-
                     <ETable 
                         columns = {columns}
                         updateSelectedItem = {Utils.updateSelectedItem.bind(this)}
@@ -346,77 +270,96 @@ export default class User extends React.Component{
                     />
                 </div>
                 <Modal
+                    forceRender
                     title={this.state.title}
                     visible={this.state.isVisible}
                     onOk={this.handleSubmit}
                     onCancel={()=>{
-                        this.formRef.current.resetFields();
+                        this.refs.userCrud.formRef.current.resetFields();
                         this.setState({
                             isVisible:false
                         })
                     }}
                     width={600}
                 >
-                    <Form 
-                        {...layout} 
-                        layout="horizontal"
-                        ref={this.formRef} 
-                        name="control-ref" 
-                        onFinish={this.onFinish} 
-                        initialValues={{
-                            userName:this.state.userInfo.userName,
-                            sex:this.state.userInfo.sex,
-                            state:this.state.userInfo.state,
-                            birthday:moment(this.state.userInfo.birthday),
-                            address:this.state.userInfo.address
-                        }}
-                    >
-                        <Form.Item 
-                            name="userName"
-                            label="姓名"
-                            rules={[{ required: true }]} 
-                        >
-                            <Input type="text" placeholder="请输入姓名" />
-                        </Form.Item>
-                        <Form.Item 
-                            name="sex"
-                            label="性别"
-                            rules={[{ required: true }]} 
-                        >
-                            <Radio.Group>
-                                <Radio value={1}>男</Radio>
-                                <Radio value={2}>女</Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                        <Form.Item name="state" label="状态" rules={[{ required: true }]}>
-                            <Select
-                                allowClear
-                            >
-                                <Option value={1}>咸鱼一条</Option>
-                                <Option value={2}>风华浪子</Option>
-                                <Option value={3}>北大才子一枚</Option>
-                                <Option value={4}>百度FE</Option>
-                                <Option value={5}>创业者</Option>
-                            </Select>
-                        </Form.Item>
-                        <Form.Item 
-                            name="birthday"
-                            label="生日"
-                            rules={[{ required: true }]}
-                        >
-                            <DatePicker  
-                                format='YYYY-MM-DD'
-                            />
-                        </Form.Item>
-                        <Form.Item 
-                            name="address"
-                            label="联系地址"
-                            rules={[{ required: true }]} 
-                        >
-                            <Input.TextArea row={3} placeholder="请输入联系地址" />
-                        </Form.Item>
-                    </Form>
+                    <UserForm
+                        ref='userCrud' 
+                        userInfo={this.state.userInfo}
+                    />
                 </Modal>
+            </div>
+        );
+    }
+}
+
+class UserForm extends React.Component{
+
+    formRef = React.createRef();
+
+    state = {}
+
+    render(){
+        return(
+            <div>
+                <Form 
+                    {...layout} 
+                    layout="horizontal"
+                    ref={this.formRef}  
+                    name="control-ref" 
+                    onFinish={this.onFinish} 
+                    initialValues={{
+                        userName:this.props.userInfo.userName,
+                        sex:this.props.userInfo.sex,
+                        state:this.props.userInfo.state,
+                        birthday:moment(this.props.userInfo.birthday),
+                        address:this.props.userInfo.address
+                    }}
+                >
+                    <Form.Item 
+                        name="userName"
+                        label="姓名"
+                        rules={[{ required: true }]} 
+                    >
+                        <Input type="text" placeholder="请输入姓名" />
+                    </Form.Item>
+                    <Form.Item 
+                        name="sex"
+                        label="性别"
+                        rules={[{ required: true }]} 
+                    >
+                        <Radio.Group>
+                            <Radio value={1}>男</Radio>
+                            <Radio value={2}>女</Radio>
+                        </Radio.Group>
+                    </Form.Item>
+                    <Form.Item name="state" label="状态" rules={[{ required: true }]}>
+                        <Select
+                            allowClear
+                        >
+                            <Option value={1}>咸鱼一条</Option>
+                            <Option value={2}>风华浪子</Option>
+                            <Option value={3}>北大才子一枚</Option>
+                            <Option value={4}>百度FE</Option>
+                            <Option value={5}>创业者</Option>
+                        </Select>
+                    </Form.Item>
+                    <Form.Item 
+                        name="birthday"
+                        label="生日"
+                        rules={[{ required: true }]}
+                    >
+                        <DatePicker  
+                            format='YYYY-MM-DD'
+                        />
+                    </Form.Item>
+                    <Form.Item 
+                        name="address"
+                        label="联系地址"
+                        rules={[{ required: true }]} 
+                    >
+                        <Input.TextArea row={3} placeholder="请输入联系地址" />
+                    </Form.Item>
+                </Form>
             </div>
         );
     }
