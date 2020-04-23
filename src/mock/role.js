@@ -32,3 +32,20 @@ Mock.mock(/permission\/edit/, 'get', {
     "code":0,
     "msg":"成功或失败提示信息"
 })
+
+// 角色用户列表API
+Mock.mock(/role\/user_list/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息",
+    "result|20":[{
+        "status|0-1": 0,
+        "user_id|+1": 1,
+        "user_name": "@cname"
+    }]
+})
+
+// 用户角色设置提交API
+Mock.mock(/role\/user_role_edit/, 'get', {
+    "code":0,
+    "msg":"成功或失败提示信息"
+})
