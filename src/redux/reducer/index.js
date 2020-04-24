@@ -1,20 +1,23 @@
 /**
  * Reducer 数据处理
 */
-import { type } from './../action';
+
+import { combineReducers } from 'redux'
+import { type } from '../action';
 
 const initialState = {
-    menuName:'首页'
+    menuName: '首页'
 }
-
-export default( state = initialState, action ) => {
-    switch (action) {
+const storeData = (state={initialState}, action) => {
+    switch (action.type) {
         case type.SWITCH_MENU:
-            return{
+            return {
                 ...state,
                 menuName:action.menuName
-            }
+            };
         default:
-            break;
+            return {...state};
     }
-}
+};
+
+export default storeData;

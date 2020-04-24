@@ -16,8 +16,10 @@ import * as serviceWorker from './serviceWorker';
  * eg：
  * 点击菜单的时候传递事件到action，
  * action调用reducer，
- * reducer更改状态，
+ * reducer更改状态，修改store数据源，
+ * 数据源获取监听器触发，
  * 最后把状态传递到页面
+ * 从而更新视图
 */
 
 const store = configureStore();
