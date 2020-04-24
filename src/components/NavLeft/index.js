@@ -7,15 +7,24 @@ import './index.less';
 
 const { SubMenu } = Menu;
 
-function handleClick(e) {
-    console.log('click', e);        
-}
-
 export default class NavLeft extends React.Component{
+
+    state = {
+        currentKey:''
+    }
+
+    handleClick = (item) => {
+        this.setState({
+            currentKey:item.key
+        });
+    }
+    
 
     UNSAFE_componentWillMount(){
         const menuTreeNode = this.renderMenu(MenuConfig);
+        let currentKey = window.location.hash.replace(/#|\?.*$/g,'');
         this.setState({
+            currentKey,
             menuTreeNode
         })
     }
@@ -52,7 +61,12 @@ export default class NavLeft extends React.Component{
                     <img src="/logo192.png" alt="" />
                     <h1>Antd Manage</h1>
                 </div>
-                <Menu theme="dark" onClick={handleClick} mode="vertical">
+                <Menu 
+                    selectedKeys={this.state.currentKey}
+                    theme="dark" 
+                    onClick={this.handleClick} 
+                    mode="vertical"
+                >
                     { this.state.menuTreeNode }
                 </Menu>
             </div>
